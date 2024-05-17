@@ -1,4 +1,4 @@
 {
-    "prettier.tabWidth": 3,
-    "prettier.trailingComma": "none"
+    "prettier.semi": false,
+    "prettier.tabWidth": 3
 }
