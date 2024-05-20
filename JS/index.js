@@ -1,5 +1,15 @@
 import { catsData } from "./catsData.js"
 const emotionsRadioDiv = document.querySelector("#emotion-radios")
+const getImageBtn = document.querySelector("#get-image-btn")
+
+getImageBtn.addEventListener("click", getMatchingCatsArray)
+
+function getMatchingCatsArray(){
+    if (document.querySelector("input[type='radio']:checked")) {
+        let selectedRadio = document.querySelector("input[type='radio']:checked").value
+        console.log(selectedRadio)
+    }
+}
 
 emotionsRadioDiv.addEventListener("change", highlightCheckedOption)
 
