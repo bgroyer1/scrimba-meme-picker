@@ -2,62 +2,80 @@ import { catsData } from "./catsData.js"
 const emotionsRadioDiv = document.querySelector("#emotion-radios")
 const getImageBtn = document.querySelector("#get-image-btn")
 const gifsOnlyOption = document.querySelector("#gifs-only-option")
-
-
-
-getImageBtn.addEventListener("click", renderCat)
-
-function renderCat() {
-    getSingleCatObject()
-}
-
-function getSingleCatObject() {
-    let catsArray = getMatchingCatsArray()
-    if (c)
-}
-
-function getMatchingCatsArray(){
-    if (document.querySelector("input[type='radio']:checked")) {
-        const selectedRadio = document.querySelector("input[type='radio']:checked").value
-        const isGif = gifsOnlyOption.checked
-        const matchingCatsArray = catsData.filter((cat) => {
-            if (isGif)  {
-                return cat.emotionTags.includes(selectedRadio) && cat.isGif
-            } else {
-                return cat.emotionTags.includes(selectedRadio)
-            } 
-        })
-        return matchingCatsArray
-    }
-}
+const memeModalInner = document.querySelector("#meme-modal-inner")
+const memeModal = document.querySelector("#meme-modal")
+const memeModalCloseBtn = document.querySelector("#meme-modal-close-btn")
 
 emotionsRadioDiv.addEventListener("change", highlightCheckedOption)
 
+memeModalCloseBtn.addEventListener("click", closeModal)
+
+getImageBtn.addEventListener("click", renderCat)
+
 function highlightCheckedOption(e) {
-    const radioArray = document.getElementsByClassName("radio")
-    for (let radio of radioArray) {
-        radio.classList.remove("highlight")
-    }
-    document.getElementById(e.target.id).parentElement.classList.add("highlight")
+	const radioArray = document.getElementsByClassName("radio")
+	for (let radio of radioArray) {
+		radio.classList.remove("highlight")
+	}
+	document.getElementById(e.target.id).parentElement.classList.add("highlight")
+}
+
+function closeModal() {
+	memeModal.style.display = "none"
+}
+
+function renderCat() {
+	const catObject = getSingleCatObject()
+	memeModalInner.innerHTML = `<img
+                                    class="cat-img"
+                                    src="./IMG/${catObject.image}"
+                                    alt="${catObject.alt}"
+                                    >`
+	memeModal.style.display = "flex"
+}
+
+function getSingleCatObject() {
+	let catsArray = getMatchingCatsArray()
+	if (catsArray.length === 1) {
+		return catsArray[0]
+	} else {
+		const randomNumber = Math.floor(Math.random() * catsArray.length)
+		return catsArray[randomNumber]
+	}
+}
+
+function getMatchingCatsArray() {
+	if (document.querySelector("input[type='radio']:checked")) {
+		const selectedRadio = document.querySelector(
+			"input[type='radio']:checked"
+		).value
+		const isGif = gifsOnlyOption.checked
+		const matchingCatsArray = catsData.filter((cat) => {
+			if (isGif) {
+				return cat.emotionTags.includes(selectedRadio) && cat.isGif
+			} else {
+				return cat.emotionTags.includes(selectedRadio)
+			}
+		})
+		return matchingCatsArray
+	}
 }
 
 /*the commented line is me experimenting with the Set function(is it a function?)
-feel like it would make the code a lot cleaner but will do it as the course intends as im sure they structured it this way for a reason */
-
-//update: the set method wasnt any cleaner. Ill look into it and see what the benefits of set vs include aref
+*/
 
 function getEmotionsArray(cats) {
 	const emotionsArray = []
 	for (let cat of cats) {
 		for (let emotion of cat.emotionTags) {
-            if (!emotionsArray.includes(emotion)) {
-                emotionsArray.push(emotion)
-            }
+			if (!emotionsArray.includes(emotion)) {
+				emotionsArray.push(emotion)
+			}
 		}
 	}
 	// let sortedEmotionsArray = [...new Set(emotionsArray)]
 	// return sortedEmotionsArray
-    return emotionsArray
+	return emotionsArray
 }
 
 function renderEmotionRadios(cats) {
